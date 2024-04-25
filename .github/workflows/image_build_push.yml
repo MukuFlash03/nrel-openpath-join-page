@@ -89,13 +89,23 @@ jobs:
     - name: Use Run ID from previous fetch_run_id job
       run: echo Run ID from previous job ${{ needs.fetch_run_id.outputs.run_id }}
       
-    - uses: actions/download-artifact@v4
+    - name: Download artifact
+      uses: actions/download-artifact@v4
       with:
         name: docker-image-tag
         github-token: ${{ secrets.GH_PAT_TAG }}
         repository: MukuFlash03/e-mission-server
-        # run-id: 8837126758
         run-id: ${{ env.RUN_ID }}
+
+    - name: Print artifact tag
+      run: cat tag_file.txt
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-image-tag
+        path: tag_file.txt
+        overwrite: true
 
     - name: List artifact
       run: ls -R 
