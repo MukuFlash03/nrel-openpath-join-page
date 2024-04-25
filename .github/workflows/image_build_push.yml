@@ -56,7 +56,7 @@ jobs:
         name: docker-image-tag
         github-token: ${{ secrets.GH_PAT_TAG }}
         repository: MukuFlash03/e-mission-server
-        # run-id: 8562709783
+        run-id: 'latest'
 
     - name: List artifact
       run: ls -R 
