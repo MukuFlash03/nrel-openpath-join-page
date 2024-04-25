@@ -36,7 +36,7 @@ jobs:
         id: run_script
         run: |
           echo "Fetching latest successful run ID from e-misison-server docker image workflow"
-          python .docker/fetch_runID.py
+          python .github/fetch_runID.py
       
       - name: Get Run ID
         id: get_run_id
@@ -76,8 +76,8 @@ jobs:
     #     docker push $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }}
 
     - name: Use Run ID from previous fetch_run_id job
-      run: echo "Run ID from pervious job: ${{ needs.fetch_run_id.outputs.run_id }}"
-
+      run: echo Run ID from previous job ${{ needs.fetch_run_id.outputs.run_id }}
+      
     - uses: actions/download-artifact@v4
       with:
         name: docker-image-tag
