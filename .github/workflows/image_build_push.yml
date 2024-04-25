@@ -42,11 +42,21 @@ jobs:
       run: echo running in repo ${GITHUB_REPOSITORY#*/} branch ${GITHUB_REF##*/} on ${{ steps.date.outputs.date }}
 
     # Runs a set of commands using the runners shell
-    - name: build docker image
-      run: |
-        docker build -t $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }} ./frontend
-        docker images
+    # - name: build docker image
+    #   run: |
+    #     docker build -t $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }} ./frontend
+    #     docker images
 
-    - name: push docker image
-      run: |
-        docker push $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }}
+    # - name: push docker image
+    #   run: |
+    #     docker push $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }}
+
+    - uses: actions/download-artifact@v4
+      with:
+        name: docker-image-tag
+        github-token: ${{ secrets.GH_PAT_TAG }}
+        repository: MukuFlash03/e-mission-server
+        # run-id: 8562709783
+
+    - name: List artifact
+      run: ls -R 
