@@ -8,7 +8,7 @@ on:
   push:
     # Mukul:
     # I've added a local test branch on my system and using it for testing image push.
-    # So, for testing purposes, need to checkout a branch "image-push-merge"
+    # So, for testing purposes, need to checkout a branch "tags-dispatch"
     # TODO: Need to change to build off master or main once it looks good.
     branches: [ tags-dispatch ]
 
