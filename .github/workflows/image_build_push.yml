@@ -13,6 +13,10 @@ on:
     branches: [ tags-dispatch ]
 
   workflow_dispatch:
+    inputs:
+      docker_image_tag:
+        description: "Latest Docker image tags passed from e-mission-server repository on image build and push"
+        required: true
 
 
 # Env variable
@@ -111,3 +115,7 @@ jobs:
 
     - name: List artifact
       run: ls -R 
+
+    - name: Print input docker image tag
+      run: |
+         echo "Input latest docker image tag: $ {{ github.event.inputs.docker_image_tag }}"

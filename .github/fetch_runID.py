@@ -48,6 +48,7 @@ if __name__ == '__main__':
 
         workflow_runs = workflow_runs_json["workflow_runs"]
         if workflow_runs:
+            # TODO: Change branch name to master so it filters runs from master branch only.
             successful_runs = [run for run in workflow_runs \
                                 if run["status"] == "completed" and \
                                 run["conclusion"] == "success" and \
