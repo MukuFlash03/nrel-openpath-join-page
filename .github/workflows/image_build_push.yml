@@ -10,7 +10,7 @@ on:
     # I've added a local test branch on my system and using it for testing image push.
     # So, for testing purposes, need to checkout a branch "image-push-merge"
     # TODO: Need to change to build off master or main once it looks good.
-    branches: [ tags-dispatch ]
+    branches: [ tags-matrix ]
 
   workflow_dispatch:
     inputs:
@@ -59,4 +59,4 @@ jobs:
 
     - name: Print input docker image tag
       run: |
-         echo "Input latest docker image tag: ${{ github.event.inputs.docker_image_tag }}"
+        echo "Input latest docker image tag: ${{ github.event.inputs.docker_image_tag }}"
