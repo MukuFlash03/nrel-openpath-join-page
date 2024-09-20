@@ -2,71 +2,69 @@ name: docker-image-push-join
 
 on:
   push:
-    branches: [ main, cleanup-cicd ]
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    branches: [ main ]
 
 env:
   DOCKER_USER: ${{secrets.DOCKER_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
 
   build:
+
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
-
     steps:
+
     - uses: actions/checkout@v2
-    
-    - name: Log in to the Container registry
-      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-       
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        tags: |
-          type=schedule
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=ref,event=branch
-          type=ref,event=tag
-          type=ref,event=pr
-          type=sha
-    
-    - name: Build and push Docker image
-      id: push
-      uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-      with:
-        context: ./frontend
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
 
-    - name: Generate artifact attestation
-      uses: actions/attest-build-provenance@v1
-      with:
-        subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-        subject-digest: ${{ steps.push.outputs.digest }}
-        push-to-registry: true
-
-    - name: Create tag artifact file
+    - name: Set docker image tags
+      id: set-tags
       run: |
-        echo "${{ steps.meta.outputs.tags }}" > join_page_tag_file.txt
-        echo "Image digest: ${{ steps.push.outputs.digest }}" >> join_page_tag_file.txt
+        set -a; source .env.tags; set +a
+        echo "JOIN_PAGE_IMAGE_TAG=${JOIN_PAGE_IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+        echo "Current join-page image tag (push): ${JOIN_PAGE_IMAGE_TAG}"
+
+    - name: docker login
+      run: | # log into docker hub account
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+    - name: Get current date # get the date of the build
+      id: date
+      run: echo "date=$(date +'%Y-%m-%d--%M-%S')" >> "$GITHUB_OUTPUT"
+
+    - name: Run a one-line script
+      run: echo running in repo ${GITHUB_REPOSITORY#*/} branch ${GITHUB_REF##*/} on ${{ steps.date.outputs.date }}
+
+    - name: build docker image
+      run: |
+        docker build -t $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }} ./frontend
+        docker images
+
+    - name: push docker image
+      run: |
+        docker push $DOCKER_USER/${GITHUB_REPOSITORY#*/}:${GITHUB_REF##*/}_${{ steps.date.outputs.date }}
+
+    - name: Update .env.tags file 
+      run: |
+        echo "JOIN_PAGE_IMAGE_TAG=${{ steps.date.outputs.date }}" > .env.tags
+
+    - name: Add, Commit, Push changes to .env.tags file
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Github Actions bot to update .env.tags with latest tags"
+        if git diff --quiet; then
+          echo "Latest timestamp already present in .env.tags file, no changes to commit"
+        else
+          git add .env.tags
+          git commit -m "Updated docker image tags in .env.tags file to the latest timestamp"
+          git push origin 
+        fi
+
+    - name: Create artifact text file
+      run: |
+          echo ${{ steps.date.outputs.date }} > join_page_tag_file.txt
+          echo "Created tag text file"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
