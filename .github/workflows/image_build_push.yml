@@ -2,7 +2,7 @@ name: docker-image-push-join
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, cleanup-cicd ]
 
 env:
   DOCKER_USER: ${{secrets.DOCKER_USER}}
