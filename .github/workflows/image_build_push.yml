@@ -22,8 +22,8 @@ jobs:
       id: set-tags
       run: |
         set -a; source .env.tags; set +a
-        echo "JOIN_PAGE_IMAGE_TAG=${JOIN_PAGE_IMAGE_TAG}" >> "$GITHUB_OUTPUT"
-        echo "Current join-page image tag (push): ${JOIN_PAGE_IMAGE_TAG}"
+        echo "JOIN_IMAGE_TAG=${JOIN_IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+        echo "Current join-page image tag (push): ${JOIN_IMAGE_TAG}"
 
     - name: docker login
       run: | # log into docker hub account
@@ -47,7 +47,7 @@ jobs:
 
     - name: Update .env.tags file 
       run: |
-        echo "JOIN_PAGE_IMAGE_TAG=${{ steps.date.outputs.date }}" > .env.tags
+        echo "JOIN_IMAGE_TAG=${{ steps.date.outputs.date }}" > .env.tags
 
     - name: Add, Commit, Push changes to .env.tags file
       run: |
