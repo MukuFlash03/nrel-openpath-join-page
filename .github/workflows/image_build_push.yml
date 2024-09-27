@@ -26,7 +26,7 @@ jobs:
         echo "Current join-page image tag (push): ${JOIN_IMAGE_TAG}"
 
     - name: docker login
-      run: | # log into docker hub account
+      run: | # log into Docker hub account
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
     - name: Get current date # get the date of the build
