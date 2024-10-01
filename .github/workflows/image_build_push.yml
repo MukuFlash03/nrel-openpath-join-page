@@ -49,6 +49,7 @@ jobs:
           echo "Event name: ${{ github.event_name }}"
 
           echo "Actor: ${{ github.actor }}"
+
           echo "Ref: ${{ github.ref }}"
           echo "Ref name: ${{ github.ref_name }}"
           echo "Ref type: ${{ github.ref_type }}"
