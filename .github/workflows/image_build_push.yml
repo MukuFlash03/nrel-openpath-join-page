@@ -43,8 +43,9 @@ jobs:
       - name: Print commit info
         run: |
           echo "Commit message: ${{ github.event.head_commit.message }}"
-          
+
           echo "Head commit author: ${{ github.event.head_commit.author.name }}"
+          
           echo "Event name: ${{ github.event_name }}"
           echo "Actor: ${{ github.actor }}"
           echo "Ref: ${{ github.ref }}"
