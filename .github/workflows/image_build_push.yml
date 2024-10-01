@@ -51,6 +51,7 @@ jobs:
           echo "Actor: ${{ github.actor }}"
 
           echo "Ref: ${{ github.ref }}"
+
           echo "Ref name: ${{ github.ref_name }}"
           echo "Ref type: ${{ github.ref_type }}"
           echo "Default branch: ${{ github.event.repository.default_branch }}"
