@@ -65,7 +65,6 @@ jobs:
           if [ "${{ github.ref_type }}" == "tag" ]; then
             base_ref=${{ github.event.base_ref }}
             echo "Branch name: branch_name=${base_ref#refs/heads/}"
-            echo "Branch name: branch_name_in=${${{ github.event.base_ref }}#refs/heads/}"
             echo "branch_name=${base_ref#refs/heads/}" >> "$GITHUB_OUTPUT"
           elif [ "${{ github.ref_type }}" == "branch" ]; then
             echo "branch_name=:${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"    
