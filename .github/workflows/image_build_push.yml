@@ -53,6 +53,7 @@ jobs:
           echo "Ref: ${{ github.ref }}"
 
           echo "Ref name: ${{ github.ref_name }}"
+
           echo "Ref type: ${{ github.ref_type }}"
           echo "Default branch: ${{ github.event.repository.default_branch }}"
           echo "Github event base ref: ${{ github.event.base_ref }}"
