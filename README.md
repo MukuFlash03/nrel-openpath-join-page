@@ -1,6 +1,6 @@
 # A generic join page for NREL OpenPATH studies and programs
 
-**Issues:** Since this repository is part of a larger project, all issues are tracked in the central docs repository. If you have a question, as suggested by the open source guide, please file an issue instead of sending an email. Since issues are public, other contributors can try to answer the question and benefit from the answer.
+**Issues:** Since this repository is part of a larger project, all issues are tracked in the central docs repository (https://github.com/e-mission). If you have a question, as suggested by the open source guide, please file an issue instead of sending an email. Since issues are public, other contributors can try to answer the question and benefit from the answer.
 
 ## Development
 
@@ -30,5 +30,5 @@ If customizing the config file, go to http://localhost:3274/?study_config=[your_
 
 ### Design decisions
 
-This join page is designed to work as a flexible, dynamic join page for any new Studies that may be added to support OpenPATH.
+This join page is designed to work as a flexible, dynamic join page for any new studies that may be added to support OpenPATH.
 The join-pages will be based off of the data within the config files in [nrel-openpath-deploy-configs](https://github.com/e-mission/nrel-openpath-deploy-configs)
